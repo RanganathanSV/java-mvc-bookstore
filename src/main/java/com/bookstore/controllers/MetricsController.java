@@ -5,8 +5,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.bookstore.metrics.CustomMetrics;
-
 import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics;
@@ -52,10 +50,6 @@ public class MetricsController extends HttpServlet {
         Writer writer = resp.getWriter();
         try {
             registry.scrape(writer);
-
-            // write additional custom metrics
-            CustomMetrics.writeCustomCounters(writer);
-
             writer.flush();
         } finally {
             writer.close();
