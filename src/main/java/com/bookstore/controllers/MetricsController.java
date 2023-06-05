@@ -49,8 +49,6 @@ public class MetricsController extends HttpServlet {
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.setContentType(TextFormat.CONTENT_TYPE_004);
 
-        CustomMetrics.incrementTotalRequests();
-
         Writer writer = resp.getWriter();
         try {
             registry.scrape(writer);
