@@ -16,6 +16,10 @@
 	
 	<mvc:annotation-driven/>
 	<mvc:resources location="/WEB-INF/resources/" mapping="/resources/**"/>
+
+	<mvc:interceptors>
+		<bean id="RequestsCounterInterceptor" class="com.bookstore.interceptors.RequestsCounterInterceptor" />
+	</mvc:interceptors>
 	
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">    
 		<property name="prefix" value="/WEB-INF/jsp/"></property>    

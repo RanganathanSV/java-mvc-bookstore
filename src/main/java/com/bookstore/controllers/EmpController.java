@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bookstore.beans.Emp;
 import com.bookstore.dao.EmpDao;
-import com.bookstore.metrics.CustomMetrics;
 
 @Controller
 public class EmpController {
@@ -26,7 +25,7 @@ public class EmpController {
     @RequestMapping("/empform")
     public String showform(Model m) {
         m.addAttribute("command", new Emp());
-        CustomMetrics.incrementTotalRequests();
+        
         return "empform";
     }
 
@@ -38,7 +37,7 @@ public class EmpController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String save(@ModelAttribute("emp") Emp emp) {
         dao.save(emp);
-        CustomMetrics.incrementTotalRequests();
+        
         return "redirect:/viewemp";// will redirect to viewemp request mapping
     }
 
@@ -47,7 +46,7 @@ public class EmpController {
     public String viewemp(Model m) {
         List<Emp> list = dao.getEmployees();
         m.addAttribute("list", list);
-        CustomMetrics.incrementTotalRequests();
+        
         return "viewemp";
     }
 
@@ -59,7 +58,7 @@ public class EmpController {
     public String edit(@PathVariable int id, Model m) {
         Emp emp = dao.getEmpById(id);
         m.addAttribute("command", emp);
-        CustomMetrics.incrementTotalRequests();
+        
         return "empeditform";
     }
 
@@ -67,7 +66,7 @@ public class EmpController {
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     public String editsave(@ModelAttribute("emp") Emp emp) {
         dao.update(emp);
-        CustomMetrics.incrementTotalRequests();
+        
         return "redirect:/viewemp";
     }
 
@@ -75,7 +74,7 @@ public class EmpController {
     @RequestMapping(value = "/deleteemp/{id}", method = RequestMethod.GET)
     public String delete(@PathVariable int id) {
         dao.delete(id);
-        CustomMetrics.incrementTotalRequests();
+        
         return "redirect:/viewemp";
     }
 }
