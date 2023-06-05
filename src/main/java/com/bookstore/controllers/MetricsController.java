@@ -5,9 +5,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import io.micrometer.core.instrument.Counter;
+import com.bookstore.metrics.CustomMetrics;
+
 import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics;
-import io.micrometer.core.instrument.binder.jvm.DiskSpaceMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics;
@@ -18,7 +18,6 @@ import io.micrometer.prometheus.PrometheusConfig;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
 import io.prometheus.client.exporter.common.TextFormat;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 
@@ -31,14 +30,12 @@ public class MetricsController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     public static final PrometheusMeterRegistry registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
-    private static final Counter totalRequests = Counter.builder("total_requests").register(registry);
 
     @SuppressWarnings("resource")
     public void init() {
         new JvmThreadMetrics().bindTo(registry);
         new JvmGcMetrics().bindTo(registry);
         new JvmMemoryMetrics().bindTo(registry);
-        new DiskSpaceMetrics(new File("/")).bindTo(registry);
         new ProcessorMetrics().bindTo(registry);
         new UptimeMetrics().bindTo(registry);
         new LogbackMetrics().bindTo(registry);
@@ -52,29 +49,20 @@ public class MetricsController extends HttpServlet {
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.setContentType(TextFormat.CONTENT_TYPE_004);
 
-        incrementTotalRequests();
+        CustomMetrics.incrementTotalRequests();
 
         Writer writer = resp.getWriter();
         try {
             registry.scrape(writer);
 
-            // export additional custom metrics
-            writer.write("# TYPE total_requests counter\n");
-            writer.write("total_requests " + getTotalRequests() + "\n");
+            // write additional custom metrics
+            CustomMetrics.writeCustomCounters(writer);
 
             writer.flush();
         } finally {
             writer.close();
         }
 
-    }
-
-    public static void incrementTotalRequests() {
-        totalRequests.increment();
-    }
-
-    public static double getTotalRequests() {
-        return totalRequests.count();
     }
 
 }

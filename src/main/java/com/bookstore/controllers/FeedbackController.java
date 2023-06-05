@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.bookstore.beans.Feedback;
 import com.bookstore.dao.FeedbackDao;
+import com.bookstore.metrics.CustomMetrics;
 
 @Controller
 @RequestMapping("feedback")
@@ -22,20 +23,20 @@ public class FeedbackController {
     @RequestMapping("/feedbackform")
     public String showform(Model m) {
         m.addAttribute("command", new Feedback());
-        MetricsController.incrementTotalRequests();
+        CustomMetrics.incrementTotalRequests();
         return "feedbackform";
     }
 
     @RequestMapping("/feedbacksuccess")
     public String showsuccess() {
-        MetricsController.incrementTotalRequests();
+        CustomMetrics.incrementTotalRequests();
         return "thanks_feedback";
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String save(@ModelAttribute("feedback") Feedback feedback) {
         dao.save(feedback);
-        MetricsController.incrementTotalRequests();
+        CustomMetrics.incrementTotalRequests();
         return "redirect:/feedback/feedbacksuccess";
     }
 
@@ -43,7 +44,7 @@ public class FeedbackController {
     public String viewbooks(Model m) {
         List<Feedback> list = dao.getFeedbacks();
         m.addAttribute("list", list);
-        MetricsController.incrementTotalRequests();
+        CustomMetrics.incrementTotalRequests();
         return "viewfeedbacks";
     }
 
@@ -63,7 +64,7 @@ public class FeedbackController {
     @RequestMapping(value = "/deletefeedback/{id}", method = RequestMethod.GET)
     public String delete(@PathVariable int id) {
         dao.delete(id);
-        MetricsController.incrementTotalRequests();
+        CustomMetrics.incrementTotalRequests();
         return "redirect:/feedback/viewfeedbacks";
     }
 }
