@@ -33,6 +33,8 @@ Before you can run this project, ensure that you have the following prerequisite
 
 - MySQL [download](https://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-community-8.0.33.0.msi)
 
+**NOTE: While installing MySQL, create an user with `username: root` and `password: root`.**
+
 
 ### 3.1. Setting Environment Variables
 
