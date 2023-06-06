@@ -116,14 +116,14 @@ create table bookstore.purchase_detail
 
 ## 4. Running the Application:
 
-To run this Java MVC application, open a terminal at the root location of the cloned project and execute the following commands one after another:
+- To run this Java MVC application, open a terminal at the root location of the cloned project and execute the following commands one after another:
 > 1. mvn compile
 > 2. mvn install
 > 3. mvn package
 
-After executing the above commands, a BookStoreMVC.war file would be generated on the _ROOT-LOCATION-OF-THE-PROJECT/target_ folder. Copy this file to _TOMCAT-INSTALLED-LOCATION\Tomcat 9.0\webapps_ location.
+- After executing the above commands, a BookStoreMVC.war file would be generated on the _ROOT-LOCATION-OF-THE-PROJECT/target_ folder. Copy this file to _TOMCAT-INSTALLED-LOCATION\Tomcat 9.0\webapps_ location.
 
-Now to start the tomcat server (default port: 8080), start the **Monitor Tomcat** app. Now the BookStoreMVC application can be viewed on _http://localhost:8080/BookStoreMVC_.
+- Now to start the tomcat server (default port: 8080), start the **Monitor Tomcat** app. Now the BookStoreMVC application can be viewed on _http://localhost:8080/BookStoreMVC_.
 
 
 ## 5. Steps Followed to Implement Prometheus Monitoring by Adding Custom Metrics to this Java MVC Application:
@@ -131,25 +131,26 @@ Now to start the tomcat server (default port: 8080), start the **Monitor Tomcat*
 
 ### 5.1. Add Prometheus Dependency:
 
-Update the **pom.xml** file in the root location of the Java Spring MVC application to include the Prometheus dependencies. 
+- Update the **pom.xml** file in the root location of the Java Spring MVC application to include the Prometheus dependencies. 
 ```java
 // Add these dependencies inside <dependencies> ... </dependencies>
 
 <dependency>
 	<groupId>io.micrometer</groupId>
-    <artifactId>micrometer-registry-prometheus</artifactId><version>1.9.2</version>
+	<artifactId>micrometer-registry-prometheus</artifactId>
+	<version>1.9.2</version>
 </dependency>
 
 <dependency>
 	<groupId>ch.qos.logback</groupId>
-    <artifactId>logback-classic</artifactId>
-    <version>1.1.11</version>
+	<artifactId>logback-classic</artifactId>
+	<version>1.1.11</version>
 </dependency>
 ```
 
-### 5.2. Expose _/metrics_ Endpoint:
+### 5.2. Expose '_/metrics_' Endpoint:
 
-Create a new file **MetricsController.java** inside _/src/main/java/com/bookstore/controllers_ to expose _/metrics_ route that can be used by prometheus to pull all the metrics of the application.
+- Create a new file **MetricsController.java** inside _/src/main/java/com/bookstore/controllers_ to expose _/metrics_ route that can be used by prometheus to pull all the metrics of the application.
 ```java
 // MetricsController.java
 
@@ -212,7 +213,7 @@ public class MetricsController extends HttpServlet {
 
 ### 5.3. Add Custom Metrics:
 
-Create a new file **CustomMetrics.java** inside _/src/main/java/com/bookstore/metrics_ to add and define custom prometheus metrics to the application.
+- Create a new file **CustomMetrics.java** inside _/src/main/java/com/bookstore/metrics_ to add and define custom prometheus metrics to the application.
 ```java
 // CustomMetrics.java
 
@@ -244,7 +245,7 @@ public class CustomMetrics {
 
 ### 5.4. Updating Custom Metrics:
 
-Create a new file **RequestsCounterInterceptor.java** inside _/src/main/java/com/bookstore/interceptors_ to intercept all the requests that is made to the application and update the custom counter metric.
+- Create a new file **RequestsCounterInterceptor.java** inside _/src/main/java/com/bookstore/interceptors_ to intercept all the requests that is made to the application and update the custom counter metric.
 ```java
 // RequestsCounterInterceptor.java
 
@@ -264,7 +265,7 @@ public class RequestsCounterInterceptor implements HandlerInterceptor {
 }
 ```
 
-Add this interceptor to the **spring-servlet.xml** inside _/src/main/webapp_.
+- Add this interceptor to the **spring-servlet.xml** inside _/src/main/webapp_.
 ```java
 // Add the below lines to add the RequestsCounterInterceptor.java in spring-servlet.xml
 
