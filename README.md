@@ -1,8 +1,8 @@
-# Adding Prometheus Monitoring (Custom Metric) to Java Spring MVC Application
+# Adding Prometheus Monitoring (Custom Metrics) to Java Spring MVC Application
 
 ## 1. Objective:
 
-The objective of this SOP is to provide step-by-step instructions for adding Prometheus Monitorin (Custom Metrics) to a Java Spring MVC application.
+The objective of this SOP is to provide step-by-step instructions for adding Prometheus Monitoring (Custom Metrics) to a Java Spring MVC application.
 
 ## 2. Technologies used:
 
@@ -21,24 +21,31 @@ The objective of this SOP is to provide step-by-step instructions for adding Pro
 ## 3. Pre-requisites:
 
 Before you can run this project, ensure that you have the following prerequisites installed:
-	- Java Development Kit(JDK) [download](https://download.oracle.com/java/20/latest/jdk-20_windows-x64_bin.exe)
-	- Apache Maven [download](https://dlcdn.apache.org/maven/maven-3/3.9.2/binaries/apache-maven-3.9.2-bin.zip)
-	- Apache Tomcat [download](https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.75/bin/apache-tomcat-9.0.75.exe)
-	- MySQL [download](https://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-community-8.0.33.0.msi)
+
+- Java Development Kit(JDK) [download](https://download.oracle.com/java/20/latest/jdk-20_windows-x64_bin.exe)
+
+- Apache Maven [download](https://dlcdn.apache.org/maven/maven-3/3.9.2/binaries/apache-maven-3.9.2-bin.zip)
+
+- Apache Tomcat [download](https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.75/bin/apache-tomcat-9.0.75.exe
+
+- MySQL [download](https://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-community-8.0.33.0.msi)
 
 > ### 3.1. Setting Environment Variables
 
 - Set the **MAVEN_HOME** environment variable in system variables to installation directory of Maven. For Example: _YOUR-DOWNLOADED-LOCATION\apache-maven-3.9.2_
+
 - Set the **JAVA_HOME** enviroment variable in system variables to installation directory of JDK. For example: _YOUR-DOWNLOADED-LOCATION\Java\jdk-20_
+
 - After setting up **MAVEN_HOME** and **JAVA_HOME** system variables, add the below paths in the **Path** system variable
 	- %MAVEN_HOME%\bin
 	- %JAVA_HOME%\bin
 
-> ### 3.2. Tables creation queries:
+> ### 3.2. Tables Creation Queries:
 
 **Before running the project, create the tables by running this sql commands**
 ```sql
 create database bookstore;
+
 create table bookstore.user
 (
 id int(50) primary key auto_increment, 
@@ -49,6 +56,7 @@ email varchar(120),
 password varchar(220),
 date_created timestamp default now()
 );
+
 create table bookstore.admin
 (
 	id int(50) primary key auto_increment, 
@@ -56,6 +64,7 @@ create table bookstore.admin
 	is_admin boolean default(false),
 	FOREIGN KEY (user_id) REFERENCES bookstore.user(id)
 );
+
 create table bookstore.book
 (
 	id int(50) primary key auto_increment, 
@@ -67,6 +76,7 @@ create table bookstore.book
 	copy int(10), 
 	price decimal(2)
 );
+
 create table bookstore.employee
 (
 	id int(50) primary key auto_increment, 
@@ -75,6 +85,7 @@ create table bookstore.employee
 	department varchar(120), 
 	reg_date timestamp default now()
 );
+
 create table bookstore.feedback 
 (
 	id int(50) primary key auto_increment, 
@@ -84,6 +95,7 @@ create table bookstore.feedback
 	feedback text, 
 	date_created timestamp default now()
 );
+
 create table bookstore.purchase_detail
 (
 	id int(50) primary key auto_increment,  
@@ -103,10 +115,6 @@ To run this Java MVC application, open a terminal at the root location of the cl
 > 2. mvn install
 > 3. mvn package
 
-After executing the above commands, a BookStoreMVC.war file would be generated on the _ROOT-LOCATION-OF-PROJECT/target folder. Copy this file to _TOMCAT-INSTALLED-LOCATION\Tomcat 9.0\webapps_ location.
+After executing the above commands, a BookStoreMVC.war file would be generated on the _ROOT-LOCATION-OF-PROJECT/target_ folder. Copy this file to _TOMCAT-INSTALLED-LOCATION\Tomcat 9.0\webapps_ location.
 
 Now to start the tomcat server (default port: 8080), Start the **Monitor Tomcat** app. Now the BookStoreMVC application can be viewed on _http://localhost:8080/BookStoreMVC_.
-
-
-
-
