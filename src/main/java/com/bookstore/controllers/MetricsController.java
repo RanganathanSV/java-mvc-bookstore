@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.bookstore.metrics.CustomMetrics;
+
 import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics;
@@ -21,11 +23,6 @@ import java.io.Writer;
 
 @WebServlet("/metrics")
 public class MetricsController extends HttpServlet {
-
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
     public static final PrometheusMeterRegistry registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
 
@@ -46,6 +43,8 @@ public class MetricsController extends HttpServlet {
 
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.setContentType(TextFormat.CONTENT_TYPE_004);
+
+        CustomMetrics.incrementTotalMetricRequests();
 
         Writer writer = resp.getWriter();
         try {
