@@ -1,8 +1,10 @@
 # Adding Prometheus Monitoring (Custom Metrics) to Java Spring MVC Application
 
+
 ## 1. Objective:
 
 The objective of this SOP is to provide step-by-step instructions for adding Prometheus Monitoring (Custom Metrics) to a Java Spring MVC application.
+
 
 ## 2. Technologies used:
 
@@ -18,6 +20,7 @@ The objective of this SOP is to provide step-by-step instructions for adding Pro
 	- Bootstrap
 	- CSS
 
+
 ## 3. Pre-requisites:
 
 Before you can run this project, ensure that you have the following prerequisites installed:
@@ -26,9 +29,10 @@ Before you can run this project, ensure that you have the following prerequisite
 
 - Apache Maven [download](https://dlcdn.apache.org/maven/maven-3/3.9.2/binaries/apache-maven-3.9.2-bin.zip)
 
-- Apache Tomcat [download](https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.75/bin/apache-tomcat-9.0.75.exe
+- Apache Tomcat [download](https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.75/bin/apache-tomcat-9.0.75.exe)
 
 - MySQL [download](https://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-community-8.0.33.0.msi)
+
 
 > ### 3.1. Setting Environment Variables
 
@@ -39,6 +43,7 @@ Before you can run this project, ensure that you have the following prerequisite
 - After setting up **MAVEN_HOME** and **JAVA_HOME** system variables, add the below paths in the **Path** system variable
 	- %MAVEN_HOME%\bin
 	- %JAVA_HOME%\bin
+
 
 > ### 3.2. Tables Creation Queries:
 
@@ -108,6 +113,7 @@ create table bookstore.purchase_detail
 );
 ```
 
+
 ## 4. Running the Application:
 
 To run this Java MVC application, open a terminal at the root location of the cloned project and execute the following commands one after another:
@@ -115,6 +121,6 @@ To run this Java MVC application, open a terminal at the root location of the cl
 > 2. mvn install
 > 3. mvn package
 
-After executing the above commands, a BookStoreMVC.war file would be generated on the _ROOT-LOCATION-OF-PROJECT/target_ folder. Copy this file to _TOMCAT-INSTALLED-LOCATION\Tomcat 9.0\webapps_ location.
+After executing the above commands, a BookStoreMVC.war file would be generated on the _ROOT-LOCATION-OF-THE-PROJECT/target_ folder. Copy this file to _TOMCAT-INSTALLED-LOCATION\Tomcat 9.0\webapps_ location.
 
 Now to start the tomcat server (default port: 8080), Start the **Monitor Tomcat** app. Now the BookStoreMVC application can be viewed on _http://localhost:8080/BookStoreMVC_.
