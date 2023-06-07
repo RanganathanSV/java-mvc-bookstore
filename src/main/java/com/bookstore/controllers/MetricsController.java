@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.bookstore.metrics.CustomMetrics;
+import com.bookstore.metrics.DynamicTagsCounter;
 
 import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics;
@@ -24,7 +24,17 @@ import java.io.Writer;
 @WebServlet("/metrics")
 public class MetricsController extends HttpServlet {
 
-    public static final PrometheusMeterRegistry registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
+    private static final PrometheusMeterRegistry registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
+    
+    // Create / Add custom metrics to this registry here
+    public static final DynamicTagsCounter totalRequests = new DynamicTagsCounter("bookstore_requests",
+            "total requests", registry,
+            "handler", "method");
+    public static final DynamicTagsCounter successResponses = new DynamicTagsCounter("bookstore_success_responses",
+            "total successful responses", registry, "handler", "method", "code");
+    public static final DynamicTagsCounter failedResponses = new DynamicTagsCounter("bookstore_failed_responses",
+            "total failed responses",
+            registry, "handler", "method", "code");
 
     @SuppressWarnings("resource")
     public void init() {
@@ -44,8 +54,6 @@ public class MetricsController extends HttpServlet {
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.setContentType(TextFormat.CONTENT_TYPE_004);
 
-        CustomMetrics.incrementTotalMetricRequests();
-
         Writer writer = resp.getWriter();
         try {
             registry.scrape(writer);
@@ -53,7 +61,5 @@ public class MetricsController extends HttpServlet {
         } finally {
             writer.close();
         }
-
     }
-
 }

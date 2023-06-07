@@ -4,13 +4,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
 
-import com.bookstore.metrics.CustomMetrics;
+import com.bookstore.controllers.MetricsController;
 
 public class RequestsCounterInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object Handler) {
-        CustomMetrics.incrementTotalRequests();
+        MetricsController.totalRequests.increment(request.getRequestURI(), request.getMethod());
         return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object Handler,
+            ModelAndView modelAndView) {
+        int responseStatus = response.getStatus();
+        if (responseStatus >= 200 && responseStatus < 300) {
+            MetricsController.successResponses.increment(request.getRequestURI(), request.getMethod(),
+                    String.valueOf(responseStatus));
+        } else {
+            MetricsController.failedResponses.increment(request.getRequestURI(), request.getMethod(),
+                    String.valueOf(responseStatus));
+        }
     }
 }
