@@ -299,6 +299,43 @@ public class RequestsCounterInterceptor implements HandlerInterceptor {
 - To access the Prometheus UI, open the browser and visit _http://localhost:9090_. To visualize the custome created metrics of the Java MVC application, query / search for the custom metric with its name to visualize it.
 
 
-## 6. Conclusion:
+## 6. Issues Faced / Troubleshooting
+
+During the process of integrating Prometheus with the Java Spring MVC application, the following issues were enountered along with their corresponding solutions:
+
+### 6.1. Incompatible Maven Version
+
+**Issue:** The application failed to build or run due to an incomptible Maven version.
+
+**Solution:** Change the Maven compiler source from 1.7 to 1.8 in _pom.xml_ files.
+```java
+// Made this change in pom.xml file
+
+  <properties>
+  	<project.build.sourceEncoding>UTF-8<s/project.build.sourceEncoding>
+	<maven.compiler.source>1.8</maven.compiler.source>  // changed it from 1.7 to 1.8
+	<maven.compiler.target>1.8</maven.compiler.target>  // changed it from 1.7 to 1.8
+  </properties>
+```
+
+
+### 6.2. Incorrect Database Credentials
+
+**Issue:** The application failed to connect to the database due to incorrect username and password.
+
+**Solution:** Verify the database credentials specified in the _spring-servlet.xml_ file inside _/src/main/webapp_.
+```xml
+<!-- Updated the username and password for sql connection in spring-servlet.xml file -->
+
+<bean id="ds" class="org.springframework.jdbc.datasource.DriverManagerDataSource">    
+	<property name="driverClassName" value="com.mysql.jdbc.Driver"></property>    
+	<property name="url" value="jdbc:mysql://localhost:3306/bookstore"></property>    
+	<property name="username" value="root"></property>    <!-- updated the correct username in the value field -->
+	<property name="password" value="root"></property>    <!-- updated the correct password in the value field -->
+</bean>   
+```
+
+
+## 7. Conclusion:
 
 By following the steps outlined in this SOP, Prometheus monitoring will be successfully integrated into the Java Spring MVC application, allowing the collection and visualization of application metrics.
