@@ -10,12 +10,15 @@ services:
       - 8080:8080
     depends_on:
       - db
+
   db:
     build:
       context: .
       dockerfile: Dockerfile
-      target: mysql
+      target: mydb
       args:
-        - MYSQL_ROOT_PASSWORD=MYSQL_ROOT_PASSWORD
+        - MYSQL_ROOT_PASSWORD=root
     ports: 
       - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql

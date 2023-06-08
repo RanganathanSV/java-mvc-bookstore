@@ -13,7 +13,7 @@ CMD ["catalina.sh", "run"]
 # --------------------------------------------------------------------------------- #
 
 # For MySQL
-FROM mysql:latest as mysql
+FROM mysql:latest as mydb
 
 # Copy the SQL script to create tables into the container
 COPY create-tables.sql /docker-entrypoint-initdb.d/
