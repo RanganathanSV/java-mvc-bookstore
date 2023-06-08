@@ -150,7 +150,60 @@ create table bookstore.purchase_detail
 </dependency>
 ```
 
-### 5.2. Expose '_/metrics_' Endpoint:
+
+### 5.2. Add Custom Metrics:
+
+- Create a new file **DynamicTagsCounter.java** inside _/src/main/java/com/bookstore/metrics_ to add and define custom prometheus metrics to the application.
+```java
+// DynamicTagsCounter.java
+
+package com.bookstore.metrics;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.ImmutableTag;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tag;
+
+public class DynamicTagsCounter {
+    private String name;
+    private String[] tagNames;
+    private String description;
+    private MeterRegistry registry;
+    private Map<String, Counter> counters = new HashMap<>();
+
+    public DynamicTagsCounter(String name, String description, MeterRegistry registry, String... tags) {
+        this.name = name;
+        this.tagNames = tags;
+        this.registry = registry;
+        this.description = description;
+    }
+
+    public void increment(String... tagValues) {
+        String valuesString = Arrays.toString(tagValues);
+        if (tagValues.length != tagNames.length) {
+            throw new IllegalArgumentException("Counter tags mismatch! Expected args are " + Arrays.toString(tagNames));
+        }
+        Counter counter = counters.get(valuesString);
+        if (counter == null) {
+            List<Tag> tags = new ArrayList<>(tagNames.length);
+            for (int i = 0; i < tagNames.length; i++) {
+                tags.add(new ImmutableTag(tagNames[i], tagValues[i]));
+            }
+            counter = Counter.builder(name).description(description).tags(tags).register(registry);
+            counters.put(valuesString, counter);
+        }
+        counter.increment();
+    }
+}
+```
+
+
+### 5.3. Expose '_/metrics_' Endpoint:
 
 - Create a new file **MetricsController.java** inside _/src/main/java/com/bookstore/controllers_ to expose _/metrics_ route that can be used by prometheus to pull all the metrics of the application.
 ```java
@@ -162,7 +215,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.bookstore.metrics.CustomMetrics;
+import com.bookstore.metrics.DynamicTagsCounter;
 import io.micrometer.core.instrument.binder.jvm.ClassLoaderMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmGcMetrics;
 import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics;
@@ -179,7 +232,17 @@ import java.io.Writer;
 @WebServlet("/metrics")
 public class MetricsController extends HttpServlet {
 
-    public static final PrometheusMeterRegistry registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
+    private static final PrometheusMeterRegistry registry = new PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
+    
+    // Create / Add custom metrics to this registry here
+    public static final DynamicTagsCounter totalRequests = new DynamicTagsCounter("bookstore_requests",
+            "total requests", registry,
+            "handler", "method");
+    public static final DynamicTagsCounter successResponses = new DynamicTagsCounter("bookstore_success_responses",
+            "total successful responses", registry, "handler", "method", "code");
+    public static final DynamicTagsCounter failedResponses = new DynamicTagsCounter("bookstore_failed_responses",
+            "total failed responses",
+            registry, "handler", "method", "code");
 
     @SuppressWarnings("resource")
     public void init() {
@@ -198,8 +261,6 @@ public class MetricsController extends HttpServlet {
 
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.setContentType(TextFormat.CONTENT_TYPE_004);
-		
-        CustomMetrics.incrementTotalMetricRequests(); // Updating the custom metric
 
         Writer writer = resp.getWriter();
         try {
@@ -213,56 +274,41 @@ public class MetricsController extends HttpServlet {
 ```
 
 
-### 5.3. Add Custom Metrics:
-
-- Create a new file **CustomMetrics.java** inside _/src/main/java/com/bookstore/metrics_ to add and define custom prometheus metrics to the application.
-```java
-// CustomMetrics.java
-
-package com.bookstore.metrics;
-
-import com.bookstore.controllers.MetricsController;
-import io.micrometer.core.instrument.Counter;
-
-public class CustomMetrics {
-	// Define / Create the custom metrics
-
-    private static Counter totalRequests = Counter.builder("total_requests_custom_metric")
-            .register(MetricsController.registry);
-    private static Counter totalMetricRequests = Counter.builder("total_metric_requests_custom_metric")
-            .register(MetricsController.registry);
-
-	// Methods to update the custom metrics created
-
-    public static void incrementTotalRequests() {
-        totalRequests.increment();
-    }
-
-    public static void incrementTotalMetricRequests() {
-        totalMetricRequests.increment();
-    }
-}
-```
-
-
 ### 5.4. Updating Custom Metrics:
 
-- Create a new file **RequestsCounterInterceptor.java** inside _/src/main/java/com/bookstore/interceptors_ to intercept all the requests that is made to the application and update the custom counter metric.
+#### 5.5. Using Request Interceptor
+
+- Create a new file **GlobalRequestInterceptor.java** inside _/src/main/java/com/bookstore/interceptors_ to intercept all the requests that is made to the application and update the custom counter metric.
 ```java
-// RequestsCounterInterceptor.java
+// GlobalRequestInterceptor.java
 
 package com.bookstore.interceptors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.HandlerInterceptor;
-import com.bookstore.metrics.CustomMetrics;
+import org.springframework.web.servlet.ModelAndView;
+import com.bookstore.controllers.MetricsController;
 
-public class RequestsCounterInterceptor implements HandlerInterceptor {
+public class GlobalRequestInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object Handler) {
-		CustomMetrics.incrementTotalRequests(); // Updating the custom metric
+        MetricsController.totalRequests.increment(request.getRequestURI(), request.getMethod());
         return true;
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object Handler,
+            ModelAndView modelAndView) {
+		// checking for response status (failed / success)
+        int responseStatus = response.getStatus();
+        if (responseStatus >= 200 && responseStatus < 300) {
+            MetricsController.successResponses.increment(request.getRequestURI(), request.getMethod(),
+                    String.valueOf(responseStatus));
+        } else {
+            MetricsController.failedResponses.increment(request.getRequestURI(), request.getMethod(),
+                    String.valueOf(responseStatus));
+        }
     }
 }
 ```
@@ -272,9 +318,37 @@ public class RequestsCounterInterceptor implements HandlerInterceptor {
 // Add the below lines to add the RequestsCounterInterceptor.java in spring-servlet.xml
 
 <mvc:interceptors>
-	<bean id="RequestsCounterInterceptor" class="com.bookstore.interceptors.RequestsCounterInterceptor" />
+	<bean id="GlobalRequestInterceptor" class="com.bookstore.interceptors.GlobalRequestInterceptor" />
 </mvc:interceptors>
 ```
+
+#### 5.5. Using Exception Handler
+
+- Create a new file **GlobalExceptionHandler.java** inside _/src/main/java/com/bookstore/interceptors_ to in
+```java
+// GlobalExceptionHandler.java
+
+package com.bookstore.interceptors;
+
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import com.bookstore.controllers.MetricsController;
+
+@ControllerAdvice()
+public class GlobalExceptionHandler {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<?> handleException(Exception ex, HttpServletRequest request) {
+		// Update the failed responses counter
+        MetricsController.failedResponses.increment(request.getRequestURI(), request.getMethod(), "500");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+    }
+}
+```
+
+- This exception handler catches any exception thrown from our controllers.
 
 
 ### 5.5. Configuring Prometheus:
