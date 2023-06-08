@@ -18,7 +18,7 @@
 	<mvc:resources location="/WEB-INF/resources/" mapping="/resources/**"/>
 
 	<mvc:interceptors>
-		<bean id="RequestsCounterInterceptor" class="com.bookstore.interceptors.RequestsCounterInterceptor" />
+		<bean id="GlobalRequestInterceptor" class="com.bookstore.interceptors.GlobalRequestInterceptor" />
 	</mvc:interceptors>
 	
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">    
