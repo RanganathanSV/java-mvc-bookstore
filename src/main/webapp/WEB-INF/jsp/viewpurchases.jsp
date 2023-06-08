@@ -50,7 +50,7 @@
 		<nav class="nav d-flex justify-content-between">
 			<a class="text-light" href="/BookStoreMVC">Home</a>
 			<a class="text-light" href="/BookStoreMVC/book/viewbooks">Manage Books</a>
-			<a class="text-light" href="/BookStoreMVC/viewemp">Manage Employees</a>
+			<a class="text-light" href="/BookStoreMVC/emp/viewemp">Manage Employees</a>
 			<a class="text-light active" href="/BookStoreMVC/purchase/viewpurchases">Manage Purchases</a>
 			<a class="text-light" href="/BookStoreMVC/feedback/viewfeedbacks">Manage Feedbacks</a>
 		</nav>
