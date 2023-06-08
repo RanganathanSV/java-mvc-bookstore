@@ -276,7 +276,7 @@ public class MetricsController extends HttpServlet {
 
 ### 5.4. Updating Custom Metrics:
 
-#### 5.5. Using Request Interceptor
+#### 5.4.1. Using Request Interceptor
 
 - Create a new file **GlobalRequestInterceptor.java** inside _/src/main/java/com/bookstore/interceptors_ to intercept all the requests that is made to the application and update the custom counter metric.
 ```java
@@ -322,9 +322,9 @@ public class GlobalRequestInterceptor implements HandlerInterceptor {
 </mvc:interceptors>
 ```
 
-#### 5.5. Using Exception Handler
+#### 5.4.2. Using Exception Handler
 
-- Create a new file **GlobalExceptionHandler.java** inside _/src/main/java/com/bookstore/interceptors_ to in
+- Create a new file **GlobalExceptionHandler.java** inside _/src/main/java/com/bookstore/interceptors_. This exception handler catches any exception thrown from our controllers.
 ```java
 // GlobalExceptionHandler.java
 
@@ -347,8 +347,6 @@ public class GlobalExceptionHandler {
     }
 }
 ```
-
-- This exception handler catches any exception thrown from our controllers.
 
 
 ### 5.5. Configuring Prometheus:
