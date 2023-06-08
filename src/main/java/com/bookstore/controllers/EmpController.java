@@ -26,7 +26,7 @@ public class EmpController {
     @RequestMapping("/empform")
     public String showform(Model m) {
         m.addAttribute("command", new Emp());
-        
+
         return "empform";
     }
 
@@ -38,8 +38,8 @@ public class EmpController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String save(@ModelAttribute("emp") Emp emp) {
         dao.save(emp);
-        
-        return "redirect:/viewemp";// will redirect to viewemp request mapping
+
+        return "redirect:/emp/viewemp";// will redirect to viewemp request mapping
     }
 
     /* It provides list of employees in model object */
@@ -47,7 +47,7 @@ public class EmpController {
     public String viewemp(Model m) {
         List<Emp> list = dao.getEmployees();
         m.addAttribute("list", list);
-        
+
         return "viewemp";
     }
 
@@ -59,7 +59,7 @@ public class EmpController {
     public String edit(@PathVariable int id, Model m) {
         Emp emp = dao.getEmpById(id);
         m.addAttribute("command", emp);
-        
+
         return "empeditform";
     }
 
@@ -67,15 +67,15 @@ public class EmpController {
     @RequestMapping(value = "/editsave", method = RequestMethod.POST)
     public String editsave(@ModelAttribute("emp") Emp emp) {
         dao.update(emp);
-        
-        return "redirect:/viewemp";
+
+        return "redirect:/emp/viewemp";
     }
 
     /* It deletes record for the given id in URL and redirects to /viewemp */
     @RequestMapping(value = "/deleteemp/{id}", method = RequestMethod.GET)
     public String delete(@PathVariable int id) {
         dao.delete(id);
-        
-        return "redirect:/viewemp";
+
+        return "redirect:/emp/viewemp";
     }
 }
