@@ -30,8 +30,8 @@ public class MetricsController extends HttpServlet {
     public static final DynamicTagsCounter totalRequests = new DynamicTagsCounter("bookstore_requests",
             "total requests", registry,
             "handler", "method");
-    public static final DynamicTagsCounter successResponses = new DynamicTagsCounter("bookstore_success_responses",
-            "total successful responses", registry, "handler", "method", "code");
+    public static final DynamicTagsCounter totalResponses = new DynamicTagsCounter("bookstore_responses",
+            "total responses", registry, "handler", "method", "code");
     public static final DynamicTagsCounter failedResponses = new DynamicTagsCounter("bookstore_failed_responses",
             "total failed responses",
             registry, "handler", "method", "code");

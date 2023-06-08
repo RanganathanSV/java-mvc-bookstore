@@ -19,12 +19,7 @@ public class GlobalRequestInterceptor implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object Handler,
             ModelAndView modelAndView) {
         int responseStatus = response.getStatus();
-        if (responseStatus >= 200 && responseStatus < 300) {
-            MetricsController.successResponses.increment(request.getRequestURI(), request.getMethod(),
+        MetricsController.totalResponses.increment(request.getRequestURI(), request.getMethod(),
                     String.valueOf(responseStatus));
-        } else {
-            MetricsController.failedResponses.increment(request.getRequestURI(), request.getMethod(),
-                    String.valueOf(responseStatus));
-        }
     }
 }
