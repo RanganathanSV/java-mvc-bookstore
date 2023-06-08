@@ -1,0 +1,738 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Dashboard that graphs metrics exported via Prometheus plugin",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "gnetId": 7424,
+  "graphTooltip": 1,
+  "id": 2,
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "info",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Prometheus Plugin Config",
+      "tooltip": "",
+      "type": "link",
+      "url": "https://docs.konghq.com/hub/kong-inc/prometheus/"
+    }
+  ],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-YlRd"
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-orange",
+                "value": null
+              },
+              {
+                "color": "dark-red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 74,
+      "options": {
+        "displayMode": "lcd",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "delta"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "valueMode": "color"
+      },
+      "pluginVersion": "9.5.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "builder",
+          "exemplar": false,
+          "expr": "sum(bookstore_requests_total)",
+          "instant": false,
+          "legendFormat": "Requests",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "builder",
+          "expr": "sum(bookstore_responses_total)",
+          "hide": false,
+          "legendFormat": "Success Responses",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "builder",
+          "expr": "sum(bookstore_failed_responses_total)",
+          "hide": false,
+          "legendFormat": "Failed Responses",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Total",
+      "transformations": [],
+      "type": "bargauge"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 8
+      },
+      "id": 61,
+      "panels": [],
+      "title": "Application Overview",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "requests"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 77,
+      "options": {
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "valueMode": "color"
+      },
+      "pluginVersion": "9.5.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "builder",
+          "expr": "sum(bookstore_requests_total{handler=~\".*/emp.*\"})",
+          "legendFormat": "/emp",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "builder",
+          "exemplar": false,
+          "expr": "sum(bookstore_requests_total{handler=~\".*/book.*\"})",
+          "hide": false,
+          "legendFormat": "/book",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "builder",
+          "expr": "sum(bookstore_requests_total{handler=~\".*/purchase.*\"})",
+          "hide": false,
+          "legendFormat": "/purchase",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "builder",
+          "expr": "sum(bookstore_requests_total{handler=~\".*/feedback.*\"})",
+          "hide": false,
+          "legendFormat": "/feedback",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Total",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "responses"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "id": 78,
+      "options": {
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "valueMode": "color"
+      },
+      "pluginVersion": "9.5.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "code",
+          "expr": "sum(bookstore_responses_total{handler=~\".*/emp.*\", code=\"200\"})",
+          "legendFormat": "/emp",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(bookstore_responses_total{handler=~\".*/book.*\", code=\"200\"})",
+          "hide": false,
+          "legendFormat": "/book",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "code",
+          "expr": "sum(bookstore_responses_total{handler=~\".*/purchase.*\", code=\"200\"})",
+          "hide": false,
+          "legendFormat": "/purchase",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "code",
+          "expr": "sum(bookstore_responses_total{handler=~\".*/feedback.*\", code=\"200\"})",
+          "hide": false,
+          "legendFormat": "/feedback",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Total",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 19
+      },
+      "id": 64,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(bookstore_requests_total{handler=~\".*/emp.*\"}[1m]))",
+          "legendFormat": "/emp",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(rate(bookstore_requests_total{handler=~\".*/book.*\"}[1m]))",
+          "hide": false,
+          "legendFormat": "/book",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(bookstore_requests_total{handler=~\".*/purchase.*\"}[1m]))",
+          "hide": false,
+          "legendFormat": "/purchase",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(bookstore_requests_total{handler=~\".*/feedback.*\"}[1m]))",
+          "hide": false,
+          "legendFormat": "/feedback",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Request Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "reqps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 19
+      },
+      "id": 75,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(bookstore_responses_total{handler=~\".*/emp.*\"}[1m]))",
+          "legendFormat": "/emp",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum(rate(bookstore_responses_total{handler=~\".*/book.*\"}[1m]))",
+          "hide": false,
+          "legendFormat": "/book",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(bookstore_responses_total{handler=~\".*/purchase.*\"}[1m]))",
+          "hide": false,
+          "legendFormat": "/purchase",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(bookstore_responses_total{handler=~\".*/feedback.*\"}[1m]))",
+          "hide": false,
+          "legendFormat": "/feedback",
+          "range": true,
+          "refId": "D"
+        }
+      ],
+      "title": "Response Rate",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 27
+      },
+      "id": 76,
+      "options": {
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "valueMode": "color"
+      },
+      "pluginVersion": "9.5.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "builder",
+          "expr": "sum by(handler) (bookstore_failed_responses_total)",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b13533bb-7077-4848-bb1d-c72cae676a5a"
+          },
+          "editorMode": "builder",
+          "expr": "sum by(handler) (bookstore_failed_responses_total{code!=\"200\"})",
+          "hide": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Failed Responses",
+      "type": "bargauge"
+    }
+  ],
+  "refresh": "5s",
+  "revision": 1,
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "timezone": "",
+  "title": "bookstore-sample",
+  "uid": "BSEbcFYVz",
+  "version": 13,
+  "weekStart": ""
+}
