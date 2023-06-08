@@ -61,7 +61,7 @@
     <div class="col-md-8 mx-auto border">
     	<h4 class="bg-light p-3 mb-3">Update Employee</h4>
     	
-	    <form:form method="POST" action="/BookStoreMVC/editsave" class="p-3">
+	    <form:form method="POST" action="/BookStoreMVC/emp/editsave" class="p-3">
 	    	<form:hidden  path="id" />
 		    <div class="mb-3">
 			  <label for="name" class="form-label">Name</label>
