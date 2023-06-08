@@ -324,7 +324,7 @@ public class GlobalRequestInterceptor implements HandlerInterceptor {
 
 #### 5.4.2. Using Exception Handler
 
-- Create a new file **GlobalExceptionHandler.java** inside _/src/main/java/com/bookstore/interceptors_. This exception handler catches any exception thrown from our controllers.
+- Create a new file **GlobalExceptionHandler.java** inside _/src/main/java/com/bookstore/interceptors_. This exception handler catches any exception thrown from the controllers.
 ```java
 // GlobalExceptionHandler.java
 
