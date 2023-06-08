@@ -13,6 +13,7 @@ import com.bookstore.beans.Emp;
 import com.bookstore.dao.EmpDao;
 
 @Controller
+@RequestMapping("emp")
 public class EmpController {
     @Autowired
     EmpDao dao;// will inject dao from XML file
