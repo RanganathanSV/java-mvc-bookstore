@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: bookstore
+    ports: 
+      - 8080:8080
+    depends_on:
+      - db
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: mysql
+      args:
+        - MYSQL_ROOT_PASSWORD=MYSQL_ROOT_PASSWORD
+    ports: 
+      - 3306:3306
